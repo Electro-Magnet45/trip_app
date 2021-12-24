@@ -12,7 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
@@ -20,7 +19,7 @@ jobs:
           java-version: "12.x"
 
       - name: Cache
-      - uses: actions/cache@v1
+        uses: actions/cache@v1
         with:
           path: /opt/hostedtoolcache/flutter
           key: Linux-flutter-install-cache-1.12.13+hotfix.5

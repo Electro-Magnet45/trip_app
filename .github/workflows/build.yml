@@ -1,0 +1,43 @@
+name: Build App
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    name: Building APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "12.x"
+
+      - name: Cache
+      - uses: actions/cache@v1
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: Linux-flutter-install-cache-1.12.13+hotfix.5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+
+      - name: Get Packages
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --split-per-abi --release
+
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/flutter-apk/*.apk"
+          token: ${{ secrets.TOKEN }}

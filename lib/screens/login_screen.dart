@@ -17,7 +17,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Colors.transparent,
+    ));
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -35,6 +38,7 @@ class _LoginState extends State<Login> {
                   Text(
                     "Hey,\nLogin Now.",
                     style: Theme.of(context).textTheme.headline4!.copyWith(
+                        fontFamily: 'Varela Round',
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         height: 1.2),
@@ -102,7 +106,7 @@ class _LoginState extends State<Login> {
                             color: Colors.black),
                       ),
                       style: TextButton.styleFrom(
-                          backgroundColor: primaryColor,
+                          backgroundColor: secondaryColr,
                           padding: const EdgeInsets.all(20),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15))),
@@ -165,10 +169,10 @@ class LoginFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(12)),
           fillColor: isPassField
               ? value.length > 5
-                  ? const Color(0xFFfdce86)
+                  ? primaryColor
                   : Colors.grey[200]
               : value.length > 3
-                  ? const Color(0xFFfdce86)
+                  ? primaryColor
                   : Colors.grey[200],
           filled: true,
           contentPadding:

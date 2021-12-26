@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:why_book/screens/login_screen.dart';
+import 'package:why_book/screens/register_screen.dart';
 import './constrains.dart';
 
 void main() {
@@ -14,8 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins', primaryColor: primaryColor),
-      home: const Login(),
+      theme: ThemeData(
+          fontFamily: 'Poppins',
+          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryColor)),
+      home: const Register(),
     );
   }
 }

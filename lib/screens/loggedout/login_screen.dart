@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
 
-import '../constrains.dart';
+import '../../constrains.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,9 +18,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.transparent,
-    ));
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       body: SafeArea(
@@ -46,8 +44,8 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 20),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Text>[
-                      fadedText("if you are new /  "),
+                    children: <Widget>[
+                      fadedText(false, "if you are new /  "),
                       const Text(
                         "  Create New",
                         style: TextStyle(
@@ -81,7 +79,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      fadedText("Forgot Password /  "),
+                      fadedText(false, "Forgot Password /  "),
                       const Text(
                         "  Reset",
                         style: TextStyle(
@@ -103,7 +101,7 @@ class _LoginState extends State<Login> {
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                       style: TextButton.styleFrom(
                           backgroundColor: secondaryColr,
@@ -113,7 +111,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  fadedText("Register")
+                  fadedText(true, "Register")
                 ],
               ),
               const SizedBox(height: 60)
@@ -124,11 +122,15 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Text fadedText(value) {
-    return Text(
-      value,
-      style: const TextStyle(color: Colors.grey, fontSize: 16),
-    );
+  Widget fadedText(bool isBtn, String value) {
+    return isBtn
+        ? GestureDetector(
+            onTap: () => Get.toNamed("/register"),
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.grey, fontSize: 16),
+            ))
+        : Text(value, style: const TextStyle(color: Colors.grey, fontSize: 16));
   }
 }
 
@@ -152,7 +154,6 @@ class LoginFormField extends StatelessWidget {
   @override
   TextFormField build(BuildContext context) {
     return TextFormField(
-      autofocus: isPassField ? false : true,
       obscureText: isPassField
           ? isPassHidden
               ? true

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/route_manager.dart';
 
-import '../constrains.dart';
+import '../../constrains.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -18,9 +19,6 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.transparent,
-    ));
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       body: SafeArea(
@@ -30,6 +28,7 @@ class _RegisterState extends State<Register> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              const SizedBox(height: 40),
               Center(
                   child: Image(
                 image: const AssetImage('assets/sign_up.png'),
@@ -60,7 +59,7 @@ class _RegisterState extends State<Register> {
                       ],
                     ),
                     const SizedBox(height: 40),
-                    fadedText("Or, register with email"),
+                    fadedText(false, "Or, register with email"),
                     const SizedBox(height: 40),
                     RegisterFormField(
                         placeholder: "Username",
@@ -102,7 +101,7 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black),
+                              color: Colors.white),
                         ),
                         style: TextButton.styleFrom(
                             backgroundColor: secondaryColr,
@@ -112,11 +111,11 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    fadedText("Login"),
-                    const SizedBox(height: 40),
+                    fadedText(true, "Login"),
                   ],
                 ),
-              )
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -124,13 +123,20 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Center fadedText(value) {
-    return Center(
-      child: Text(
-        value,
-        style: const TextStyle(color: Colors.grey, fontSize: 16),
-      ),
-    );
+  Widget fadedText(bool isBtn, String value) {
+    return isBtn
+        ? GestureDetector(
+            onTap: () => Get.back(),
+            child: Center(
+                child: Text(
+              value,
+              style: const TextStyle(color: Colors.grey, fontSize: 16),
+            )))
+        : Center(
+            child: Text(
+            value,
+            style: const TextStyle(color: Colors.grey, fontSize: 16),
+          ));
   }
 }
 

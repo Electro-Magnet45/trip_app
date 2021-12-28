@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:why_book/screens/loggedIn/home_page.dart';
-import 'package:why_book/screens/loggedOut/login_screen.dart';
-import 'package:why_book/screens/loggedOut/register_screen.dart';
+import './screens/loggedin/home_page.dart';
+import './screens/loggedout/login_screen.dart';
+import './screens/loggedout/register_screen.dart';
 
 final Map<String, Widget Function(BuildContext)> loggedOutRoutes = {
   '/login': (context) => const Login(),

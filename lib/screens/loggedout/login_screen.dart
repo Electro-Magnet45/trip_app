@@ -40,7 +40,6 @@ class _LoginState extends State<Login> {
                     style: Theme.of(context).textTheme.headline4!.copyWith(
                         fontFamily: 'Varela Round',
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
                         height: 1.2),
                   ),
                   const SizedBox(height: 20),

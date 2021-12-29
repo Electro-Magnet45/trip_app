@@ -24,7 +24,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           fontFamily: 'Poppins',
-          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryColor),
+          colorScheme: ThemeData()
+              .colorScheme
+              .copyWith(primary: primaryColor, surface: Colors.black),
+          textTheme: ThemeData().textTheme.apply(
+                displayColor: Colors.black,
+              ),
           appBarTheme: const AppBarTheme(
             elevation: 0,
             backgroundColor: Color(0xFFF8F8F8),
@@ -32,7 +37,7 @@ class _MyAppState extends State<MyApp> {
             toolbarHeight: 100,
           )),
       initialRoute: isLoggedIn ? '/home' : '/login',
-      routes: isLoggedIn ? loggedInRoutes : loggedOutRoutes,
+      routes: routes,
     );
   }
 }

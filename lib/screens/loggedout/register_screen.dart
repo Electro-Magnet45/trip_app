@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
+import '../userpages/home_page.dart';
 
 import '../../constrains.dart';
 
@@ -47,8 +48,7 @@ class _RegisterState extends State<Register> {
                       "Sign up",
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                           fontFamily: 'Varela Round',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 40),
                     Row(
@@ -97,7 +97,9 @@ class _RegisterState extends State<Register> {
                     SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.offAll(() => const Home());
+                        },
                         child: const Text(
                           "Register",
                           style: TextStyle(
@@ -191,12 +193,9 @@ class RegisterSocialMedia extends StatelessWidget {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.only(right: 15),
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-              width: 0.5,
-            ),
+            border: Border.all(color: Colors.grey, width: 0.5),
             borderRadius: BorderRadius.circular(10)),
         child: SvgPicture.asset(iconUrl, height: 40),
       ),

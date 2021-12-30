@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:why_book/constrains.dart';
@@ -97,7 +95,7 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
-            hometitle("Recent"),
+            hometitle("Upcoming"),
             const SizedBox(height: 10),
             SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -112,7 +110,7 @@ class Home extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            hometitle("Top Destination"),
+            hometitle("Recent"),
             const SizedBox(height: 10),
             SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -148,13 +146,6 @@ class Home extends StatelessWidget {
 class HomeListItem2 extends StatelessWidget {
   const HomeListItem2({Key? key}) : super(key: key);
 
-  String generateRandomString(int len) {
-    var r = Random();
-    String randomString =
-        String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
-    return randomString;
-  }
-
   @override
   Container build(BuildContext context) {
     final Color intColor = Colors.black.withOpacity(.5);
@@ -180,14 +171,14 @@ class HomeListItem2 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              generateRandomString(5),
+              "Telaga",
               style: Theme.of(context)
                   .textTheme
                   .headline6!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(generateRandomString(6), style: TextStyle(color: intColor))
+            Text("Bandung", style: TextStyle(color: intColor))
           ],
         )
       ]),
@@ -200,61 +191,55 @@ class HomeListItem1 extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  String generateRandomString(int len) {
-    var r = Random();
-    String randomString =
-        String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
-    return randomString;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10),
-      height: 340,
-      width: 270,
+      margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10, left: 10),
+      padding: const EdgeInsets.all(10),
+      height: 300,
+      width: 200,
       decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                offset: const Offset(0, 6),
-                blurRadius: 5,
-                spreadRadius: 0.5,
-                color: Colors.grey.withOpacity(0.2))
-          ],
-          borderRadius: BorderRadius.circular(45),
-          image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage('https://picsum.photos/200'))),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, bottom: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Spacer(),
-            homeListBack(
-              context,
-              Text(
-                generateRandomString(10),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5!
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.grey, width: 0.2)),
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(30),
+            child: Image.network(
+              "https://picsum.photos/230",
+              height: 190,
             ),
-            homeListBack(
-              context,
-              Text(
-                generateRandomString(20),
-                style: const TextStyle(color: Colors.white),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Row(
+                  children: const [
+                    Text(
+                      'Canada',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                    Icon(Icons.arrow_right, size: 34)
+                  ],
+                ),
+                const SizedBox(height: 5),
+                const Text('30 March',
+                    style: TextStyle(color: Colors.grey, fontSize: 17)),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Container homeListBack(BuildContext context, Text textWidget) {
+  Container homeListBack(Text textWidget) {
     return Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
@@ -273,6 +258,7 @@ class CScaffold extends StatelessWidget {
   @override
   Scaffold build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F8F8),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),

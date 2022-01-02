@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
 
   Widget fadedText(bool isBtn, String value) {
     return isBtn
-        ? GestureDetector(
+        ? InkWell(
             onTap: () => Get.toNamed("/register"),
             child: Text(
               value,

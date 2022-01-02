@@ -18,12 +18,12 @@ class _MyAppState extends State<MyApp> {
   bool isLoggedIn = false;
 
   @override
-  Widget build(BuildContext context) {
+  GetMaterialApp build(BuildContext context) {
     return GetMaterialApp(
+      defaultTransition: Transition.downToUp,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          fontFamily: 'Poppins',
           colorScheme: ThemeData()
               .colorScheme
               .copyWith(primary: primaryColor, surface: Colors.black),

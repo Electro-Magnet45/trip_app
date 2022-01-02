@@ -129,7 +129,7 @@ class _RegisterState extends State<Register> {
 
   Widget fadedText(bool isBtn, String value) {
     return isBtn
-        ? GestureDetector(
+        ? InkWell(
             onTap: () => Get.back(),
             child: Center(
                 child: Text(

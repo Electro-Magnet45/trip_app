@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/route_manager.dart';
+import 'package:why_book/components/cscaffold.dart';
 import 'package:why_book/constrains.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  CScaffold build(BuildContext context) {
     final Color intColor = Colors.black.withOpacity(.5);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.transparent,
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFFF8F8F8), // navigation bar color
+      statusBarColor: Color(0xFFF8F8F8), // status bar color
+      statusBarBrightness: Brightness.dark, //status bar brigtness
+      statusBarIconBrightness: Brightness.dark, //status bar Icon Brightness
+      systemNavigationBarIconBrightness: Brightness.dark, //navigation bar icon
     ));
     return CScaffold(
       appBar: Row(
@@ -32,7 +38,6 @@ class Home extends StatelessWidget {
                 "Welcome",
                 style: TextStyle(fontSize: 18, color: intColor),
               ),
-              const SizedBox(height: 5),
               const Text("User Name",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600))
             ],
@@ -56,7 +61,7 @@ class Home extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 30, top: 10),
+        padding: const EdgeInsets.only(left: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -143,6 +148,78 @@ class Home extends StatelessWidget {
   }
 }
 
+class HomeListItem1 extends StatelessWidget {
+  const HomeListItem1({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  GestureDetector build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.toNamed('/trip-plan'),
+      child: Container(
+        margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10, left: 10),
+        padding: const EdgeInsets.all(10),
+        height: 300,
+        width: 200,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: const [
+              BoxShadow(
+                  offset: Offset(0, 1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  color: Colors.grey)
+            ]),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Image.network(
+                "https://picsum.photos/230",
+                height: 190,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Row(
+                    children: const [
+                      Text(
+                        'Canada',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      Icon(Icons.arrow_right, size: 34)
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  const Text('30 March',
+                      style: TextStyle(color: Colors.grey, fontSize: 17)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container homeListBack(Text textWidget) {
+    return Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.white54.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(50)),
+        child: textWidget);
+  }
+}
+
 class HomeListItem2 extends StatelessWidget {
   const HomeListItem2({Key? key}) : super(key: key);
 
@@ -182,98 +259,6 @@ class HomeListItem2 extends StatelessWidget {
           ],
         )
       ]),
-    );
-  }
-}
-
-class HomeListItem1 extends StatelessWidget {
-  const HomeListItem1({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10, left: 10),
-      padding: const EdgeInsets.all(10),
-      height: 300,
-      width: 200,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.grey, width: 0.2)),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Image.network(
-              "https://picsum.photos/230",
-              height: 190,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  children: const [
-                    Text(
-                      'Canada',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Spacer(),
-                    Icon(Icons.arrow_right, size: 34)
-                  ],
-                ),
-                const SizedBox(height: 5),
-                const Text('30 March',
-                    style: TextStyle(color: Colors.grey, fontSize: 17)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container homeListBack(Text textWidget) {
-    return Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.white54.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(50)),
-        child: textWidget);
-  }
-}
-
-class CScaffold extends StatelessWidget {
-  const CScaffold({Key? key, required this.appBar, required this.body})
-      : super(key: key);
-  final Widget appBar;
-  final Widget body;
-
-  @override
-  Scaffold build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F8F8),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(30),
-                child: appBar,
-              ),
-              body,
-              const SizedBox(height: 40),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

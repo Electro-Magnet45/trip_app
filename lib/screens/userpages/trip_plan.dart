@@ -1,129 +1,194 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/route_manager.dart';
-import 'package:why_book/components/cscaffold.dart';
-import 'package:why_book/constrains.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:travel_app/components.dart';
 
-class TripPlan extends StatelessWidget {
+class TripPlan extends StatefulWidget {
   const TripPlan({Key? key}) : super(key: key);
 
   @override
-  CScaffold build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Color(0xFFF8F8F8),
-      statusBarColor: Color(0xFFF8F8F8),
-      statusBarBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
-    return CScaffold(
-        appBar: Row(
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  border: Border.all(width: 2, color: const Color(0xFFEBEBEB)),
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: const [
-                    BoxShadow(
-                      spreadRadius: 0.8,
-                      offset: Offset(0, 5),
-                      color: Colors.grey,
-                      blurRadius: 8,
-                    )
-                  ]),
-              child: InkWell(
-                  onTap: () => Get.back(),
-                  child: const Icon(
-                    Icons.chevron_left,
-                    size: 38,
-                  )),
-            ),
-            const Spacer(),
-            Text(
-              "Canada trip plan",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5!
-                  .copyWith(fontWeight: FontWeight.bold, fontFamily: 'Poppins'),
-            )
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 10,
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey,
-                            width: 0.6,
-                          ),
-                        ),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          menuItem(
-                              context: context,
-                              day: 1,
-                              date: "30 March",
-                              isActive: true),
-                          menuItem(context: context, day: 2, date: "31 March"),
-                          menuItem(context: context, day: 3, date: "1 April"),
-                          menuItem(context: context, day: 4, date: "2 April"),
-                          menuItem(context: context, day: 5, date: "3 April"),
-                          menuItem(context: context, day: 6, date: "4 April"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Flexible(
-                  flex: 1,
-                  child: Icon(Icons.chevron_right),
-                )
-              ],
-            )
-          ],
-        ));
+  State<TripPlan> createState() => _TripPlanState();
+}
+
+class _TripPlanState extends State<TripPlan> {
+  final ValueNotifier<bool> _editMode = ValueNotifier<bool>(false);
+  final ValueNotifier<List<LatLng>> _latLngList = ValueNotifier<List<LatLng>>(
+      [LatLng(8.89, 76.61), LatLng(9.95, 76.34), LatLng(9.32, 76.62)]);
+  final PageController _controller = PageController(viewportFraction: 0.88);
+
+  @override
+  void dispose() {
+    super.dispose();
+    _editMode.dispose();
+    _latLngList.dispose();
+    _controller.dispose();
   }
 
-  Container menuItem(
-      {required BuildContext context,
-      required int day,
-      required String date,
-      bool isActive = false}) {
+  @override
+  CScaffold build(BuildContext context) {
+    return CScaffold(
+        fullScreen: true,
+        body: Stack(children: <Widget>[
+          ValueListenableBuilder(
+              valueListenable: _latLngList,
+              builder: (_, List<LatLng> val, __) => SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: TripMap(
+                    latLngList: val,
+                    addMarker: (LatLng latlng) =>
+                        _latLngList.value = [..._latLngList.value, latlng],
+                    deleteMarker: (LatLng latlng) {
+                      final int index = _latLngList.value.indexOf(latlng);
+                      _latLngList.value = _latLngList.value
+                          .where((e) => _latLngList.value.indexOf(e) != index)
+                          .toList();
+                    },
+                    getEditMode: () => _editMode.value,
+                  ))),
+          Padding(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child: ValueListenableBuilder(
+                valueListenable: _editMode,
+                builder: (_, bool val, __) => !val
+                    ? iconBuild(Icons.chevron_left, () => Get.back())
+                    : Container()),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child: Align(
+                alignment: Alignment.topRight,
+                child: ValueListenableBuilder(
+                    valueListenable: _editMode,
+                    builder: (_, bool val, __) => iconBuild(
+                        val ? Icons.close : Icons.edit,
+                        () => _editMode.value = !val))),
+          ),
+          Positioned(
+            bottom: 35,
+            left: 0,
+            right: 0,
+            child: SizedBox(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 3,
+              child: PageView(controller: _controller, children: <Container>[
+                tripDetail(_controller),
+                tripDetail(_controller),
+                tripDetail(_controller),
+                tripDetail(_controller),
+              ]),
+            ),
+          )
+        ]));
+  }
+
+  Container tripDetail(PageController controller) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      margin: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width / 12),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color: isActive ? secondaryColr : Colors.transparent,
-                  width: 3))),
-      child: Column(children: [
-        Text(
-          "Day $day",
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
-              .copyWith(fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          date,
-          style: const TextStyle(color: Colors.grey),
-        )
-      ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const <Widget>[
+                Text('12:45 AM'),
+                Flexible(
+                  child: Text('sdd dsfjisdbfbss',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                )
+              ]),
+          const Spacer(),
+          Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(14)),
+              child: InkWell(
+                onTap: () => controller.nextPage(
+                    duration: const Duration(milliseconds: 900),
+                    curve: Curves.ease),
+                child: const Icon(Icons.chevron_right,
+                    size: 50, color: Colors.white),
+              ))
+        ],
+      ),
     );
+  }
+
+  Container iconBuild(IconData icon, void Function() onTap) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+          border: Border.all(width: 2, color: const Color(0xFFEBEBEB)),
+          shape: BoxShape.circle,
+          color: Colors.white,
+          boxShadow: const <BoxShadow>[
+            BoxShadow(
+                spreadRadius: 0.1,
+                color: Color.fromARGB(255, 204, 200, 200),
+                blurRadius: 9)
+          ]),
+      child: InkWell(onTap: onTap, child: Icon(icon, size: 20)),
+    );
+  }
+}
+
+class TripMap extends StatelessWidget {
+  const TripMap(
+      {Key? key,
+      required this.latLngList,
+      required this.addMarker,
+      required this.getEditMode,
+      required this.deleteMarker})
+      : super(key: key);
+  final List<LatLng> latLngList;
+  final void Function(LatLng) addMarker;
+  final void Function(LatLng) deleteMarker;
+  final bool Function() getEditMode;
+
+  @override
+  FlutterMap build(BuildContext context) {
+    List<Marker> _markers = latLngList
+        .map((LatLng point) => Marker(
+            point: point,
+            width: 60,
+            height: 60,
+            builder: (context) => GestureDetector(
+                onLongPress: () {
+                  if (!getEditMode() || latLngList.length == 1) return;
+                  deleteMarker(point);
+                },
+                child: const Icon(Icons.location_on,
+                    size: 60, color: Colors.red))))
+        .toList();
+
+    return FlutterMap(
+        options: MapOptions(
+            bounds:
+                LatLngBounds(latLngList[0], latLngList[latLngList.length - 1]),
+            onLongPress: (_, LatLng latlng) {
+              if (!getEditMode()) return;
+              addMarker(latlng);
+            }),
+        layers: [
+          TileLayerOptions(
+              minZoom: 1,
+              maxZoom: 18,
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']),
+          PolylineLayerOptions(polylines: <Polyline>[
+            Polyline(points: latLngList, strokeWidth: 5.0, color: Colors.red)
+          ]),
+          MarkerLayerOptions(markers: _markers)
+        ]);
   }
 }

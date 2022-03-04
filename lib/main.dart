@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:why_book/routes.dart';
+import 'package:travel_app/routes.dart';
 import './constrains.dart';
 
 void main() {
@@ -21,22 +21,12 @@ class _MyAppState extends State<MyApp> {
   GetMaterialApp build(BuildContext context) {
     return GetMaterialApp(
       defaultTransition: Transition.downToUp,
-      title: 'Flutter Demo',
+      title: 'Travel',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          colorScheme: ThemeData()
-              .colorScheme
-              .copyWith(primary: primaryColor, surface: Colors.black),
-          textTheme: ThemeData().textTheme.apply(
-                displayColor: Colors.black,
-              ),
-          appBarTheme: const AppBarTheme(
-            elevation: 0,
-            backgroundColor: Color(0xFFF8F8F8),
-            foregroundColor: Colors.black,
-            toolbarHeight: 100,
-          )),
-      initialRoute: isLoggedIn ? '/home' : '/login',
+          colorScheme: ThemeData().colorScheme.copyWith(primary: primaryColor),
+          textTheme: ThemeData().textTheme.apply(displayColor: Colors.black)),
+      initialRoute: '/home',
       routes: routes,
     );
   }

@@ -1,157 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
-import 'package:why_book/components/cscaffold.dart';
-import 'package:why_book/constrains.dart';
+import 'package:travel_app/components.dart';
+import 'package:travel_app/constrains.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  CScaffold build(BuildContext context) {
+  GestureDetector build(BuildContext context) {
+    const imgUrl = 'https://picsum.photos/230';
+    final List<Map> recentItems = [
+      {'id': '1', 'name': 'Canada', 'date': '30 March', 'imgUrl': imgUrl},
+      {'id': '2', 'name': 'London', 'date': '3 June', 'imgUrl': imgUrl},
+      {'id': '3', 'name': 'USA', 'date': '22 August', 'imgUrl': imgUrl},
+      {'id': '4', 'name': 'Thrissur', 'date': '24 August', 'imgUrl': imgUrl},
+      {'id': '5', 'name': 'Kollam', 'date': '9 December', 'imgUrl': imgUrl},
+    ];
     final Color intColor = Colors.black.withOpacity(.5);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Color(0xFFF8F8F8), // navigation bar color
-      statusBarColor: Color(0xFFF8F8F8), // status bar color
-      statusBarBrightness: Brightness.dark, //status bar brigtness
-      statusBarIconBrightness: Brightness.dark, //status bar Icon Brightness
-      systemNavigationBarIconBrightness: Brightness.dark, //navigation bar icon
-    ));
-    return CScaffold(
-      appBar: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(500),
-            child: Image.network(
-              'https://image.shutterstock.com/image-photo/beautiful-water-drop-on-dandelion-260nw-789676552.jpg',
-              width: 62,
-              height: 62,
-              fit: BoxFit.fill,
-            ),
-          ),
-          const SizedBox(width: 30),
-          Column(
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent));
+
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: CScaffold(
+        appBar: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: SvgPicture.network(
+                      'https://avatars.dicebear.com/api/male/john.svg',
+                      height: 50)),
+              const SizedBox(width: 20),
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text("Welcome",
+                        style: TextStyle(fontSize: 18, color: intColor)),
+                    const Text("John",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600))
+                  ]),
+            ]),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 30),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                "Welcome",
-                style: TextStyle(fontSize: 18, color: intColor),
-              ),
-              const Text("User Name",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600))
-            ],
-          ),
-          const Spacer(),
-          Stack(
-            alignment: Alignment.topRight,
-            children: <Widget>[
-              Icon(Icons.notifications,
-                  size: 32, color: Colors.black.withOpacity(.5)),
               Container(
-                height: 18,
-                width: 18,
-                decoration: BoxDecoration(
-                    border: Border.all(width: 2, color: Colors.white),
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(50)),
-              )
-            ],
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(left: 10, right: 40, bottom: 35),
-              child: TextField(
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                decoration: InputDecoration(
-                  prefixIcon: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Icon(
-                      Icons.search,
-                      color: intColor,
-                      size: 32,
-                    ),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(right: 30, bottom: 35),
+                child: TextField(
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w500),
+                  decoration: InputDecoration(
+                    prefixIcon: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Icon(Icons.search, color: intColor, size: 20)),
+                    suffixIcon: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: secondaryColr),
+                        child: const Icon(Icons.filter_list,
+                            color: Colors.white, size: 20)),
+                    contentPadding: const EdgeInsets.all(4),
+                    hintText: "Search Places",
+                    hintStyle: TextStyle(
+                        color: intColor, fontWeight: FontWeight.normal),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                   ),
-                  suffixIcon: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: secondaryColr,
-                    ),
-                    child: const Icon(
-                      Icons.filter_list,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                  hintText: " Search Destination",
-                  hintStyle:
-                      TextStyle(color: intColor, fontWeight: FontWeight.normal),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(12)),
                 ),
               ),
-            ),
-            hometitle("Upcoming"),
-            const SizedBox(height: 10),
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: const [
-                  HomeListItem1(),
-                  HomeListItem1(),
-                  HomeListItem1(),
-                  HomeListItem1(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-            hometitle("Recent"),
-            const SizedBox(height: 10),
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: const [
-                  HomeListItem2(),
-                  HomeListItem2(),
-                  HomeListItem2(),
-                  HomeListItem2(),
-                ],
-              ),
-            ),
-          ],
+              hometitle("Recent"),
+              const SizedBox(height: 5),
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    children: recentItems
+                        .map((Map e) => HomeListItem(item: e))
+                        .toList()),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 
   Row hometitle(String title) {
-    return Row(children: [
-      Text(
-        title,
-        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-      ),
+    return Row(children: <Widget>[
+      Text(title,
+          style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600)),
       const Spacer(),
       const Icon(Icons.more_horiz),
-      const SizedBox(width: 30)
+      const SizedBox(width: 35)
     ]);
   }
 }
 
-class HomeListItem1 extends StatelessWidget {
-  const HomeListItem1({
+class HomeListItem extends StatelessWidget {
+  const HomeListItem({
     Key? key,
+    required this.item,
   }) : super(key: key);
+
+  final Map item;
 
   @override
   GestureDetector build(BuildContext context) {
@@ -159,48 +118,41 @@ class HomeListItem1 extends StatelessWidget {
       onTap: () => Get.toNamed('/trip-plan'),
       child: Container(
         margin: const EdgeInsets.only(right: 20, top: 20, bottom: 10, left: 10),
-        padding: const EdgeInsets.all(10),
-        height: 300,
-        width: 200,
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+        height: 250,
+        width: 150,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(30),
-            boxShadow: const [
+            boxShadow: <BoxShadow>[
               BoxShadow(
-                  offset: Offset(0, 1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  color: Colors.grey)
+                  offset: const Offset(0, 0.5),
+                  spreadRadius: 0.5,
+                  blurRadius: 8,
+                  color: Colors.grey.shade400)
             ]),
         child: Column(
-          children: [
+          children: <Widget>[
             ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Image.network(
-                "https://picsum.photos/230",
-                height: 190,
-              ),
-            ),
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(item['imgUrl'], height: 120)),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 10),
-                  Row(
-                    children: const [
-                      Text(
-                        'Canada',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Spacer(),
-                      Icon(Icons.arrow_right, size: 34)
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  const Text('30 March',
-                      style: TextStyle(color: Colors.grey, fontSize: 17)),
+                  Row(children: <Widget>[
+                    Text(item['name'],
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold)),
+                    const Spacer(),
+                    const Icon(Icons.arrow_right, size: 28)
+                  ]),
+                  Text(item['date'],
+                      style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                  const SizedBox(height: 10)
                 ],
               ),
             ),
@@ -217,48 +169,5 @@ class HomeListItem1 extends StatelessWidget {
             color: Colors.white54.withOpacity(0.2),
             borderRadius: BorderRadius.circular(50)),
         child: textWidget);
-  }
-}
-
-class HomeListItem2 extends StatelessWidget {
-  const HomeListItem2({Key? key}) : super(key: key);
-
-  @override
-  Container build(BuildContext context) {
-    final Color intColor = Colors.black.withOpacity(.5);
-
-    return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          border: Border.all(width: 0.1, color: Colors.grey.withOpacity(0.7)),
-          borderRadius: BorderRadius.circular(20)),
-      child: Row(children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.network(
-            'https://picsum.photos/200',
-            height: 80,
-            width: 80,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Telaga",
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text("Bandung", style: TextStyle(color: intColor))
-          ],
-        )
-      ]),
-    );
   }
 }

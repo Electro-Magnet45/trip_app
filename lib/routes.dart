@@ -4,5 +4,5 @@ import './screens/userpages/home_page.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
   '/home': (BuildContext context) => const Home(),
-  '/trip-plan': (BuildContext context) => const TripPlan(),
+  '/trip-plan': (BuildContext context) => TripPlan(),
 };
